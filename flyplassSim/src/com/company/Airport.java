@@ -1,9 +1,6 @@
 package com.company;
-
-
 import jsjf.CircularArrayQueue;
 import jsjf.EmptyCollectionException;
-
 import java.sql.SQLOutput;
 import java.util.Random;
 import java.util.Scanner;
@@ -12,34 +9,27 @@ public class Airport {
     private static class Plane {
         private int arrival;
         private int id;
-
-
-
+	
         public Plane(int arrival, int id){
             this.arrival = arrival;
             this.id = id;
-
         }
         public int timeToWait(int time){
-            return time - arrival;
+        return time - arrival;
         }
-
+	    
         public int getId() {
             return id;
         }
     }
-
     public static class runway {
         private int timeOnRunway;
-
         public runway(){
             timeOnRunway = 0;
         }
-
         public boolean runwayEmpty(int time){
             return time >= timeOnRunway;
         }
-
         public void setTimeOnRunway(int time){
             timeOnRunway = time;
         }
@@ -68,8 +58,6 @@ public class Airport {
             int planeArrivals = getPoissonRandom(pA);
             int planeDepature = getPoissonRandom(pD);
 
-
-
             for(int i = 0; i < planeArrivals; i++){
                 int planeId = airQ.size() + groundQ.size() + totPlanesLanded + totPlaneTakeoffs + 1;
                 //Landing
@@ -77,11 +65,11 @@ public class Airport {
                     Plane p = new Plane(time, planeId);
                     airQ.enqueue(p);
                     System.out.println("Plane "+ p.getId() + " arrived for landing.");
-                } else {
+                } 
+		else {
                     totLandReqDeclines++;
                     System.out.println("Plane " + planeId + " was declined landing.");
                 }
-
                 totPlanesManaged++;
             }
 
@@ -92,51 +80,45 @@ public class Airport {
                     Plane p = new Plane(time, planeId);
                     groundQ.enqueue(p);
                     System.out.println("Plane "+ p.getId() + " is ready for takeoff.");
-                } else{
+                } 
+		else{
                     System.out.println("Plane "+ planeId + " was denied takeoff.");
                     totTakeOffReqDeclines++;
                 }
-
                 totPlanesManaged++;
             }
             // land or takeoff
             if(runway.runwayEmpty(time)){
                 if(!airQ.isEmpty()){
-
                     Plane p = null;
                     try {
                         p = airQ.dequeue();
                         totPlanesLanded++;
                         System.out.println("Plane " + p.getId() + " landed.");
-
-                    } catch (EmptyCollectionException e) {
+                    } 
+		    catch (EmptyCollectionException e) {
                         e.printStackTrace();
                     }
-
                     totRunwayTime ++;
                     totWaitTimeAir += p.timeToWait(time);
-
-
-                } else if(!groundQ.isEmpty()){
-
+                } 
+		else if(!groundQ.isEmpty()){
                     Plane p = null;
                     try {
                         p = groundQ.dequeue();
                         totPlaneTakeoffs++;
                         System.out.println("Plane " + p.getId() + " departed.");
-                    } catch (EmptyCollectionException e) {
+                    } 
+		    catch (EmptyCollectionException e) {
                         e.printStackTrace();
                     }
-
                     totRunwayTime ++;
                     totWaitTimeGround  += p.timeToWait(time);
-
-
-                } else{
+                } 
+		else{
                     totTimeEmptyRunway++;
                     System.out.println("No arrivals/departures");
                 }
-
             }
             System.out.println("Planes awaiting landing clearance: " + airQ.size());
             System.out.println("Planes awaiting takeoff clearance: " + groundQ.size());
@@ -146,7 +128,6 @@ public class Airport {
         }
         int runwayUsage = totPlanesLanded + totPlaneTakeoffs;
         int runwayDowntime = tU - runwayUsage;
-
         System.out.println("Simulation finished after " + tU + " time units");
         System.out.println("Total planes managed         : " + totPlanesManaged);
         System.out.println("Total planes landed          : " + totPlanesLanded);
@@ -158,17 +139,14 @@ public class Airport {
         System.out.println("Average wait time for landing: " + (float)totWaitTimeAir/(float)totPlanesLanded);
         System.out.println("Average wait time for takeoff: " + (float)totWaitTimeGround/(float)totPlaneTakeoffs);
         System.out.println("Total planes denied takeoff  : " + totTakeOffReqDeclines);
-
-
     }
-
-
+	
     public static void main(String[] args) {
 
 	int timeUnits, maxTimeOnRunway, queueSize;
 	float planeArr;
 	float planeDep;
-
+	    
         System.out.println("Velkommen til Halden Airport, tax-free butikken er dessverre stengt");
         Scanner sc = new Scanner(System.in);
         System.out.println("Select number of rounds the sim should run");
@@ -180,11 +158,7 @@ public class Airport {
         planeArr = sc.nextFloat();
         System.out.println("Set base avrage plane depature");
         planeDep = sc.nextFloat();
-
-
-
         simulate(timeUnits, queueSize, planeArr, planeDep);
-
     }
     private static int getPoissonRandom(double mean)
     {
